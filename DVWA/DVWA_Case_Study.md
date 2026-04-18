@@ -35,9 +35,9 @@ This case study documents every vulnerability I tested — the payloads used, wh
 
 Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
 
-![Login Page](screenshots/image1.png)
+![Login Page](DVWA/DVWA/LoginPage.png)
 
-![DVWA Home](screenshots/image2.png)
+![DVWA Home](DVWA/DVWA/HomePage.png)
 
 ---
 
@@ -63,11 +63,11 @@ Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
 
 No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper mode with a custom wordlist to find the password instantly.
 
-![Brute Force Low 1](screenshots/image3.png)
-![Brute Force Low 2](screenshots/image4.png)
-![Brute Force Low 3](screenshots/image5.png)
-![Brute Force Low 4](screenshots/image6.png)
-![Brute Force Low 5](screenshots/image7.png)
+![Brute Force Low 1](DVWA/DVWA/Bruteforce/low1.png)
+![Brute Force Low 2](DVWA/DVWA/Bruteforce/low2.png)
+![Brute Force Low 3](DVWA/DVWA/Bruteforce/low3.png)
+![Brute Force Low 4](DVWA/DVWA/Bruteforce/low4.png)
+![Brute Force Low 5](DVWA/DVWA/Bruteforce/low5.png)
 
 ---
 
