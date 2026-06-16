@@ -61,9 +61,11 @@ This case study documents every vulnerability I tested — the payloads used, wh
 
 ## 🔑 Login Page
 
-Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
+Accessed DVWA at `http://localhost/DVWA/login.php` using default credentials.
 
 ![Login Page](DVWA/LoginPage.png)
+
+Home Page at `http://localhost/DVWA/index.php`
 
 ![DVWA Home](DVWA/HomePage.png)
 
@@ -92,9 +94,25 @@ Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
 No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper mode with a custom wordlist to find the password instantly.
 
 ![Brute Force Low 1](DVWA/Bruteforce/low1.png)
+
+**Step 1: Intercept the login request using Burp Suite Proxy**
+ 
+Opened the DVWA Brute Force page and submitted a test login. Burp Suite intercepted the GET request — showing `username=admin&password=test` clearly in the request. This confirms the parameters we need to attack.
+
 ![Brute Force Low 2](DVWA/Bruteforce/low2.png)
+
+**Step 2 — Configure Intruder with a password wordlist**
+ 
+Sent the intercepted request to **Intruder**, marked the `password` parameter as the payload position (§test§), set attack type to **Sniper**, and loaded a common password wordlist (123456, password, admin, letmein...). The response **Length** column reveals the correct password — `password` returned **5106 bytes** while all wrong passwords returned **5063 bytes**, making it stand out instantly.
+
 ![Brute Force Low 3](DVWA/Bruteforce/low3.png)
+
+**Step 3 — Login confirmed with found password**
+ 
+Used the discovered password `password` to log in — server responded with **"Welcome to the password protected area admin"**, confirming the brute force was successful.
+
 ![Brute Force Low 4](DVWA/Bruteforce/low4.png)
+
 ![Brute Force Low 5](DVWA/Bruteforce/low5.png)
 
 ---
@@ -103,6 +121,13 @@ No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper
 
 The server adds a **2-second delay** after every failed login to slow down tools. Burp Suite Intruder still works — it just takes longer.
 
+![Brute Force Low 1](DVWA/Bruteforce/low1.png)
+### Step 1: Capture the Request
+
+- Enter any test credentials on the DVWA Brute Force page.
+- Intercept the login request using Burp Suite Proxy.
+- Verify that the `security=medium` cookie is present in the request.
+![Brute Force Low 2](DVWA/Bruteforce/low2.png)
 ![Brute Force Medium 1](DVWA/Bruteforce/medium1.png)
 ![Brute Force Medium 2](DVWA/Bruteforce/medium2.png)
 ![Brute Force Medium 3](DVWA/Bruteforce/medium3.png)
