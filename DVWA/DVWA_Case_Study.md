@@ -101,13 +101,13 @@ Opened the DVWA Brute Force page and submitted a test login. Burp Suite intercep
 
 ![Brute Force Low 2](DVWA/Bruteforce/low2.png)
 
-**Step 2 — Configure Intruder with a password wordlist**
+**Step 2: Configure Intruder with a password wordlist**
  
 Sent the intercepted request to **Intruder**, marked the `password` parameter as the payload position (§test§), set attack type to **Sniper**, and loaded a common password wordlist (123456, password, admin, letmein...). The response **Length** column reveals the correct password — `password` returned **5106 bytes** while all wrong passwords returned **5063 bytes**, making it stand out instantly.
 
 ![Brute Force Low 3](DVWA/Bruteforce/low3.png)
 
-**Step 3 — Login confirmed with found password**
+**Step 3: Login confirmed with found password**
  
 Used the discovered password `password` to log in — server responded with **"Welcome to the password protected area admin"**, confirming the brute force was successful.
 
@@ -122,13 +122,15 @@ Used the discovered password `password` to log in — server responded with **"W
 The server adds a **2-second delay** after every failed login to slow down tools. Burp Suite Intruder still works — it just takes longer.
 
 ![Brute Force Low 1](DVWA/Bruteforce/low1.png)
-### Step 1: Capture the Request
 
-- Enter any test credentials on the DVWA Brute Force page.
-- Intercept the login request using Burp Suite Proxy.
-- Verify that the `security=medium` cookie is present in the request.
-![Brute Force Low 2](DVWA/Bruteforce/low2.png)
+**Step 1: Intercept the login request**
+Same process as Low — intercepted the login request in Burp Suite Proxy. Notice the cookie shows security=medium, confirming we are now testing the Medium level. The 2-second server delay is invisible at this stage.
+
 ![Brute Force Medium 1](DVWA/Bruteforce/medium1.png)
+
+**Step 2: Intruder attack results with delay**
+Same Sniper attack with the same wordlist. password again stands out with 5115 bytes vs 5072 bytes for wrong passwords. Key difference from Low — the "Response received" column shows much higher times (2003ms, 4011ms, 6009ms...) — each request takes ~2 seconds longer because the server is intentionally slowing us down. Intruder still finds the password, just slower.
+
 ![Brute Force Medium 2](DVWA/Bruteforce/medium2.png)
 ![Brute Force Medium 3](DVWA/Bruteforce/medium3.png)
 ![Brute Force Medium 4](DVWA/Bruteforce/medium4.png)
