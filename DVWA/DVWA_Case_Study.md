@@ -1,4 +1,8 @@
-# 🔐 DVWA — Web Application Security Case Study
+# 🔐 DVWA Case Study: Web Application Penetration Testing
+ 
+> **Damn Vulnerable Web Application (DVWA)** — A hands-on walkthrough of common web vulnerabilities, exploitation techniques, and defensive countermeasures.
+ 
+
 
 <div align="center">
 
@@ -7,6 +11,38 @@
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge)
 
 </div>
+
+---
+ 
+## 📋 Table of Contents
+ 
+- [Overview](#overview)
+- [Lab Details](#lab-details)
+- [Vulnerability Assessment](#vulnerability-assessment)
+  - [1. Brute Force Attack](#1-brute-force-attack)
+  - [2. Command Injection)](#2-command-injection)
+  - [3. Cross-Site Request Forgery (CSRF)](#3-cross-site-request-forgery-csrf)
+  - [4. File Inclusion (LFI/RFI)](#4-file-inclusion-lfirfi)
+  - [5. Command Injection](#5-command-injection)
+  - [6. File Upload Vulnerability](#6-file-upload-vulnerability)
+  - [7. Brute Force Attack](#7-brute-force-attack)
+  - [8. Insecure CAPTCHA](#8-insecure-captcha)
+- [Tools Used](#tools-used)
+- [Security Levels Tested](#security-levels-tested)
+- [Key Findings & Recommendations](#key-findings--recommendations)
+- [Lessons Learned](#lessons-learned)
+- [Disclaimer](#disclaimer)
+---
+
+---
+
+---
+
+## 📌 Overview
+
+DVWA is a deliberately insecure PHP/MySQL web application built for security learners. I installed it directly on **Kali Linux** and used it to practice real web attack techniques across three security levels.
+
+This case study documents every vulnerability I tested — the payloads used, why they work, and what I learned from each one.
 
 ---
 
@@ -21,15 +57,6 @@
 | **Tools Used** | Burp Suite · SQLMap · Python · exiftool |
 | **Levels Tested** | 🟢 Low · 🟡 Medium · 🔴 High |
 
----
-
-## 📌 Overview
-
-DVWA is a deliberately insecure PHP/MySQL web application built for security learners. I installed it directly on **Kali Linux** and used it to practice real web attack techniques across three security levels.
-
-This case study documents every vulnerability I tested — the payloads used, why they work, and what I learned from each one.
-
----
 
 ## 🔑 Login Page
 
