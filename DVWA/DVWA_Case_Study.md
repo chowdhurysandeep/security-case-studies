@@ -284,8 +284,8 @@ A proper CSRF token is required. Bypassed by **chaining with Stored XSS** — in
 > 💡 This runs entirely inside the victim's browser — the server sees a valid token and accepts the request.
 
 ![CSRF High 1](DVWA/CSRF/high1.png)
-![CSRF High 2](DVWA/CSRF/high1.png)
-![CSRF High 3](DVWA/CSRF/high1.png)
+![CSRF High 2](DVWA/CSRF/high2.png)
+![CSRF High 3](DVWA/CSRF/high3.png)
 
 ---
 
@@ -567,7 +567,7 @@ http://localhost/DVWA/vulnerabilities/xss_d/?default=English</option></select><i
 > 💡 The filter only targets `<script>` — HTML event handlers in other tags are completely unaffected.
 
 ![XSS DOM High 1](DVWA/XSS%20(DOM)/high1.png)
-![XSS DOM High 2](DVWA/XSS%20(DOM)/high1.png)
+![XSS DOM High 2](DVWA/XSS%20(DOM)/high2.png)
 
 ---
 
