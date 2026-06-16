@@ -63,9 +63,9 @@ This case study documents every vulnerability I tested — the payloads used, wh
 
 Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
 
-![Login Page](DVWA/DVWA/LoginPage.png)
+![Login Page](DVWA/LoginPage.png)
 
-![DVWA Home](DVWA/DVWA/HomePage.png)
+![DVWA Home](DVWA/HomePage.png)
 
 ---
 
@@ -91,11 +91,11 @@ Accessed DVWA at `http://localhost/dvwa/login.php` using default credentials.
 
 No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper mode with a custom wordlist to find the password instantly.
 
-![Brute Force Low 1](DVWA/DVWA/Bruteforce/low1.png)
-![Brute Force Low 2](DVWA/DVWA/Bruteforce/low2.png)
-![Brute Force Low 3](DVWA/DVWA/Bruteforce/low3.png)
-![Brute Force Low 4](DVWA/DVWA/Bruteforce/low4.png)
-![Brute Force Low 5](DVWA/DVWA/Bruteforce/low5.png)
+![Brute Force Low 1](DVWA/Bruteforce/low1.png)
+![Brute Force Low 2](DVWA/Bruteforce/low2.png)
+![Brute Force Low 3](DVWA/Bruteforce/low3.png)
+![Brute Force Low 4](DVWA/Bruteforce/low4.png)
+![Brute Force Low 5](DVWA/Bruteforce/low5.png)
 
 ---
 
@@ -103,10 +103,10 @@ No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper
 
 The server adds a **2-second delay** after every failed login to slow down tools. Burp Suite Intruder still works — it just takes longer.
 
-![Brute Force Medium 1](screenshots/image8.png)
-![Brute Force Medium 2](screenshots/image9.png)
-![Brute Force Medium 3](screenshots/image10.png)
-![Brute Force Medium 4](screenshots/image11.png)
+![Brute Force Medium 1](DVWA/Bruteforce/medium1.png)
+![Brute Force Medium 2](DVWA/Bruteforce/medium2.png)
+![Brute Force Medium 3](DVWA/Bruteforce/medium3.png)
+![Brute Force Medium 4](DVWA/Bruteforce/medium4.png)
 
 ---
 
@@ -148,18 +148,18 @@ for password in passwords:
 
 > 💡 The script logs in automatically, then loops through passwords — fetching a fresh CSRF token before every single attempt.
 
-![Brute Force High 1](screenshots/image12.png)
-![Brute Force High 2](screenshots/image13.png)
-![Brute Force High 3](screenshots/image14.png)
-![Brute Force High 4](screenshots/image15.png)
-![Brute Force High 5](screenshots/image16.png)
-![Brute Force High 6](screenshots/image17.png)
-![Brute Force High 7](screenshots/image18.png)
-![Brute Force High 8](screenshots/image19.png)
-![Brute Force High 9](screenshots/image20.png)
-![Brute Force High 10](screenshots/image21.png)
-![Brute Force High 11](screenshots/image22.png)
-![Brute Force High 12](screenshots/image23.png)
+![Brute Force High 1](DVWA/Bruteforce/high1.png)
+![Brute Force High 2](DVWA/Bruteforce/high2.png)
+![Brute Force High 3](DVWA/Bruteforce/high3.png)
+![Brute Force High 4](DVWA/Bruteforce/high4.png)
+![Brute Force High 5](DVWA/Bruteforce/high5.png)
+![Brute Force High 6](DVWA/Bruteforce/high6.png)
+![Brute Force High 7](DVWA/Bruteforce/high7.png)
+![Brute Force High 8](DVWA/Bruteforce/high8.png)
+![Brute Force High 9](DVWA/Bruteforce/high9.png)
+![Brute Force High 10](DVWA/Bruteforce/high10.png)
+![Brute Force High 11](DVWA/Bruteforce/high11.png)
+![Brute Force High 12](DVWA/Bruteforce/high12.png)
 
 ---
 
@@ -180,9 +180,9 @@ Zero input filtering. Used `;` to chain commands directly after the ping.
 127.0.0.1; cat /etc/passwd
 ```
 
-![Command Injection Low 1](screenshots/image24.png)
-![Command Injection Low 2](screenshots/image25.png)
-![Command Injection Low 3](screenshots/image26.png)
+![Command Injection Low 1](DVWA/Command%20Injection/low1.png)
+![Command Injection Low 2](DVWA/Command%20Injection/low2.png)
+![Command Injection Low 3](DVWA/Command%20Injection/low3.png)
 
 ---
 
@@ -196,8 +196,8 @@ The server blocks `;` and `&&` — but completely forgets about the pipe `|`.
 
 > 💡 The filter only removes `;` and `&&` — pipe is never mentioned.
 
-![Command Injection Medium 1](screenshots/image27.png)
-![Command Injection Medium 2](screenshots/image28.png)
+![Command Injection Medium 1](DVWA/Command%20Injection/medium1.png)
+![Command Injection Medium 2](DVWA/Command%20Injection/medium2.png)
 
 ---
 
@@ -211,8 +211,8 @@ More characters are blocked — but there is a **typo in the filter**. It blocks
 
 > 💡 No space between `|` and `whoami` — sneaks past the filter completely.
 
-![Command Injection High 1](screenshots/image29.png)
-![Command Injection High 2](screenshots/image30.png)
+![Command Injection High 1](DVWA/Command%20Injection/high1.png)
+![Command Injection High 2](DVWA/Command%20Injection/high2.png)
 
 ---
 
@@ -242,8 +242,8 @@ No CSRF token and no Referer check. Created an HTML file that auto-submits a pas
 
 > 💡 When a logged-in DVWA user opens `attack.html` — their password is changed to `hacked` without them clicking anything.
 
-![CSRF Low 1](screenshots/image31.png)
-![CSRF Low 2](screenshots/image32.png)
+![CSRF Low 1](DVWA/CSRF/low1.png)
+![CSRF Low 2](DVWA/CSRF/low2.png)
 
 ---
 
@@ -260,9 +260,9 @@ Then opened: `http://localhost/localhost/attack.html`
 
 > 💡 The Referer header contains `localhost` — the weak check passes even though the request is forged.
 
-![CSRF Medium 1](screenshots/image33.png)
-![CSRF Medium 2](screenshots/image34.png)
-![CSRF Medium 3](screenshots/image35.png)
+![CSRF Medium 1](DVWA/CSRF/medium1.png)
+![CSRF Medium 2](DVWA/CSRF/medium2.png)
+![CSRF Medium 3](DVWA/CSRF/medium3.png)
 
 ---
 
@@ -283,9 +283,9 @@ A proper CSRF token is required. Bypassed by **chaining with Stored XSS** — in
 
 > 💡 This runs entirely inside the victim's browser — the server sees a valid token and accepts the request.
 
-![CSRF High 1](screenshots/image36.png)
-![CSRF High 2](screenshots/image37.png)
-![CSRF High 3](screenshots/image38.png)
+![CSRF High 1](DVWA/CSRF/high1.png)
+![CSRF High 2](DVWA/CSRF/high1.png)
+![CSRF High 3](DVWA/CSRF/high1.png)
 
 ---
 
@@ -305,7 +305,7 @@ No path restrictions. Read the server's user list by passing an absolute path di
 http://localhost/DVWA/vulnerabilities/fi/?page=/etc/passwd
 ```
 
-![File Inclusion Low](screenshots/image39.png)
+![File Inclusion Low](DVWA/File%20Inclusion/low.png)
 
 ---
 
@@ -319,7 +319,7 @@ http://localhost/DVWA/vulnerabilities/fi/?page=....//....//....//etc/passwd
 
 > 💡 `....//` becomes `../` after one strip — still traverses up the directory tree.
 
-![File Inclusion Medium](screenshots/image40.png)
+![File Inclusion Medium](DVWA/File%20Inclusion/medium.png)
 
 ---
 
@@ -331,7 +331,7 @@ Only filenames starting with the word `file` are permitted. The `file://` URI sc
 http://localhost/DVWA/vulnerabilities/fi/?page=file:///etc/passwd
 ```
 
-![File Inclusion High](screenshots/image41.png)
+![File Inclusion High](DVWA/File%20Inclusion/high.png)
 
 ---
 
@@ -358,10 +358,10 @@ http://localhost/DVWA/hackable/uploads/shell.php?cmd=id
 
 > ✅ Result: `uid=33(www-data) gid=33(www-data)` — full RCE confirmed.
 
-![File Upload Low 1](screenshots/image42.png)
-![File Upload Low 2](screenshots/image43.png)
-![File Upload Low 3](screenshots/image44.png)
-![File Upload Low 4](screenshots/image45.png)
+![File Upload Low 1](DVWA/File%20Upload/low1.png)
+![File Upload Low 2](DVWA/File%20Upload/low2.png)
+![File Upload Low 3](DVWA/File%20Upload/low3.png)
+![File Upload Low 4](DVWA/File%20Upload/low4.png)
 
 ---
 
@@ -375,10 +375,10 @@ Content-Type: application/x-php  →  Content-Type: image/jpeg
 
 > 💡 The server trusts the Content-Type header blindly — changing it tricks the server into accepting the PHP file.
 
-![File Upload Medium 1](screenshots/image46.png)
-![File Upload Medium 2](screenshots/image47.png)
-![File Upload Medium 3](screenshots/image48.png)
-![File Upload Medium 4](screenshots/image49.png)
+![File Upload Medium 1](DVWA/File%20Upload/medium1.png)
+![File Upload Medium 2](DVWA/File%20Upload/medium2.png)
+![File Upload Medium 3](DVWA/File%20Upload/medium3.png)
+![File Upload Medium 4](DVWA/File%20Upload/medium4.png)
 
 ---
 
@@ -398,10 +398,10 @@ http://localhost/DVWA/vulnerabilities/fi/?page=/var/www/html/DVWA/hackable/uploa
 
 > 💡 **Chained attack** — File Upload High + File Inclusion = RCE. The image passes all checks but contains executable PHP code in the metadata.
 
-![File Upload High 1](screenshots/image50.png)
-![File Upload High 2](screenshots/image51.png)
-![File Upload High 3](screenshots/image52.png)
-![File Upload High 4](screenshots/image53.png)
+![File Upload High 1](DVWA/File%20Upload/high1.png)
+![File Upload High 2](DVWA/File%20Upload/high2.png)
+![File Upload High 3](DVWA/File%20Upload/high3.png)
+![File Upload High 4](DVWA/File%20Upload/high4.png)
 
 ---
 
@@ -431,9 +431,9 @@ sqlmap -u "http://localhost/DVWA/vulnerabilities/sqli/?id=1&Submit=Submit" \
 
 > ✅ SQLMap identified MySQL as the backend and dumped all databases including `dvwa`.
 
-![SQL Injection Low 1](screenshots/image54.png)
-![SQL Injection Low 2](screenshots/image55.png)
-![SQL Injection Low 3](screenshots/image56.png)
+![SQL Injection Low 1](DVWA/sqli/low1.png)
+![SQL Injection Low 2](DVWA/sqli/low2.png)
+![SQL Injection Low 3](DVWA/sqli/low3.png)
 
 ---
 
@@ -446,8 +446,8 @@ The server uses `mysqli_real_escape_string()` but forgets to wrap the value in q
 1 UNION SELECT user, password FROM users-- -
 ```
 
-![SQL Injection Medium 1](screenshots/image57.png)
-![SQL Injection Medium 2](screenshots/image58.png)
+![SQL Injection Medium 1](DVWA/sqli/medium1.png)
+![SQL Injection Medium 2](DVWA/sqli/medium2.png)
 
 ---
 
@@ -461,8 +461,8 @@ Input is taken via a **pop-up form** into a session variable — designed to con
 
 > ⚠️ After submitting in the pop-up — look at the **main page**, not the pop-up itself.
 
-![SQL Injection High 1](screenshots/image59.png)
-![SQL Injection High 2](screenshots/image60.png)
+![SQL Injection High 1](DVWA/sqli/high1.png)
+![SQL Injection High 2](DVWA/sqli/high2.png)
 
 ---
 
@@ -478,11 +478,11 @@ Input is taken via a **pop-up form** into a session variable — designed to con
 
 Session IDs are simply **auto-incrementing integers**: 1, 2, 3... Confirmed by clicking Generate multiple times and watching the `dvwaSession` cookie in browser Developer Tools.
 
-![Weak Session Low 1](screenshots/image61.png)
-![Weak Session Low 2](screenshots/image62.png)
-![Weak Session Low 3](screenshots/image63.png)
-![Weak Session Low 4](screenshots/image64.png)
-![Weak Session Low 5](screenshots/image65.png)
+![Weak Session Low 1](DVWA/Weak%20Session%20ID/low1.png)
+![Weak Session Low 2](DVWA/Weak%20Session%20ID/low2.png)
+![Weak Session Low 3](DVWA/Weak%20Session%20ID/low3.png)
+![Weak Session Low 4](DVWA/Weak%20Session%20ID/low4.png)
+![Weak Session Low 5](DVWA/Weak%20Session%20ID/low5.png)
 
 ---
 
@@ -496,8 +496,8 @@ date -d @<session_value>
 
 > 💡 Output showed the exact current date and time — still fully predictable.
 
-![Weak Session Medium 1](screenshots/image66.png)
-![Weak Session Medium 2](screenshots/image67.png)
+![Weak Session Medium 1](DVWA/Weak%20Session%20ID/medium1.png)
+![Weak Session Medium 2](DVWA/Weak%20Session%20ID/medium2.png)
 
 ---
 
@@ -515,8 +515,8 @@ echo -n "2" | md5sum
 
 > 💡 Matched the `dvwaSession` cookie to MD5("1") — confirming it is trivially crackable.
 
-![Weak Session High 1](screenshots/image68.png)
-![Weak Session High 2](screenshots/image69.png)
+![Weak Session High 1](sDVWA/Weak%20Session%20ID/high1.png)
+![Weak Session High 2](DVWA/Weak%20Session%20ID/high2.png)
 
 ---
 
@@ -536,8 +536,8 @@ The page writes `?default=` directly into the DOM using `document.write` — no 
 http://localhost/DVWA/vulnerabilities/xss_d/?default=<script>alert('DOM XSS')</script>
 ```
 
-![XSS DOM Low 1](screenshots/image70.png)
-![XSS DOM Low 2](screenshots/image71.png)
+![XSS DOM Low 1](DVWA/XSS%20(DOM)/low1.png)
+![XSS DOM Low 2](DVWA/XSS%20(DOM)/low2.png)
 
 ---
 
@@ -551,8 +551,8 @@ http://localhost/DVWA/vulnerabilities/xss_d/?default=English#<script>alert('DOM 
 
 > 💡 Server sees `?default=English` (valid). Browser reads the script after `#` and executes it.
 
-![XSS DOM Medium 1](screenshots/image72.png)
-![XSS DOM Medium 2](screenshots/image73.png)
+![XSS DOM Medium 1](DVWA/XSS%20(DOM)/medium1.png)
+![XSS DOM Medium 2](DVWA/XSS%20(DOM)/medium2.png)
 
 ---
 
@@ -566,8 +566,8 @@ http://localhost/DVWA/vulnerabilities/xss_d/?default=English</option></select><i
 
 > 💡 The filter only targets `<script>` — HTML event handlers in other tags are completely unaffected.
 
-![XSS DOM High 1](screenshots/image74.png)
-![XSS DOM High 2](screenshots/image75.png)
+![XSS DOM High 1](DVWA/XSS%20(DOM)/high1.png)
+![XSS DOM High 2](DVWA/XSS%20(DOM)/high1.png)
 
 ---
 
@@ -587,8 +587,8 @@ The name input is reflected directly into HTML with zero encoding.
 <script>alert('XSS')</script>
 ```
 
-![XSS Reflected Low 1](screenshots/image76.png)
-![XSS Reflected Low 2](screenshots/image77.png)
+![XSS Reflected Low 1](DVWA/XSS%20(Reflected)/low1.png)
+![XSS Reflected Low 2](DVWA/XSS%20(Reflected)/low2.png)
 
 ---
 
@@ -602,7 +602,7 @@ The server removes the exact string `<script>` — but only script tags. HTML ev
 
 > 💡 The filter checks for `<script>` only — an `<img>` tag with `onerror` is invisible to it.
 
-![XSS Reflected Medium](screenshots/image78.png)
+![XSS Reflected Medium](DVWA/XSS%20(Reflected)/medium1.png)
 
 ---
 
@@ -622,8 +622,8 @@ The guestbook saves both fields with zero sanitization. The script fires for eve
 <script>alert('Stored XSS')</script>
 ```
 
-![XSS Stored Low 1](screenshots/image79.png)
-![XSS Stored Low 2](screenshots/image80.png)
+![XSS Stored Low 1](DVWA/XSS%20(Stored)/low1.png)
+![XSS Stored Low 2](DVWA/XSS%20(Stored)/low2.png)
 
 ---
 
@@ -637,9 +637,9 @@ The message field uses `strip_tags()` — but the **name field** only removes lo
 
 > 💡 `strip_tags()` on the message doesn't help when the name field is still wide open.
 
-![XSS Stored Medium 1](screenshots/image81.png)
-![XSS Stored Medium 2](screenshots/image82.png)
-![XSS Stored Medium 3](screenshots/image83.png)
+![XSS Stored Medium 1](DVWA/XSS%20(Stored)/medium1.png)
+![XSS Stored Medium 2](DVWA/XSS%20(Stored)/medium2.png)
+![XSS Stored Medium 3](DVWA/XSS%20(Stored)/medium3.png)
 
 ---
 
@@ -653,9 +653,9 @@ Script tags blocked by case-insensitive regex — but it only covers `<script>`.
 
 > 💡 No matter how good the `<script>` regex is — as long as other HTML tags are allowed, XSS is possible.
 
-![XSS Stored High 1](screenshots/image84.png)
-![XSS Stored High 2](screenshots/image85.png)
-![XSS Stored High 3](screenshots/image86.png)
+![XSS Stored High 1](DVWA/XSS%20(Stored)/high1.png)
+![XSS Stored High 2](DVWA/XSS%20(Stored)/high2.png)
+![XSS Stored High 3](DVWA/XSS%20(Stored)/high3.png)
 
 ---
 
