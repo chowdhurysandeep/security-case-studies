@@ -16,23 +16,24 @@
  
 ## 📋 Table of Contents
  
-- [Overview](#overview)
-- [Lab Details](#lab-details)
-- [Vulnerability Assessment](#vulnerability-assessment)
-  - [1. Brute Force Attack](#1-brute-force-attack)
-  - [2. Command Injection)](#2-command-injection)
-  - [3. Cross-Site Request Forgery (CSRF)](#3-cross-site-request-forgery-csrf)
-  - [4. File Inclusion (LFI/RFI)](#4-file-inclusion-lfirfi)
-  - [5. Command Injection](#5-command-injection)
-  - [6. File Upload Vulnerability](#6-file-upload-vulnerability)
-  - [7. Brute Force Attack](#7-brute-force-attack)
-  - [8. Insecure CAPTCHA](#8-insecure-captcha)
-- [Tools Used](#tools-used)
-- [Security Levels Tested](#security-levels-tested)
-- [Key Findings & Recommendations](#key-findings--recommendations)
-- [Lessons Learned](#lessons-learned)
-- [Disclaimer](#disclaimer)
----
+- [Lab Details](#-lab-details)
+- [Overview](#-overview)
+- [Login Page](#-login-page)
+- [Security Levels](#-security-levels)
+- [1. 🔐 Brute Force](#1--brute-force)
+- [2. 💣 Command Injection](#2--command-injection)
+- [3. 🔄 CSRF](#3--csrf--cross-site-request-forgery)
+- [4. 📂 File Inclusion (LFI)](#4--file-inclusion-lfi)
+- [5. 📁 File Upload → RCE](#5--file-upload--remote-code-execution)
+- [6. 💉 SQL Injection](#6--sql-injection)
+- [7. 🪪 Weak Session IDs](#7--weak-session-ids)
+- [8. 🌐 XSS — DOM Based](#8--xss--dom-based)
+- [9. 🪞 XSS — Reflected](#9--xss--reflected)
+- [10. 📝 XSS — Stored](#10--xss--stored)
+- [Results Summary](#-results-summary)
+- [What I Learned](#-what-i-learned)
+- [Disclaimer](#️-disclaimer)
+
 
 ---
 
