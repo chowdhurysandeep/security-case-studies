@@ -25,7 +25,20 @@ A hands-on collection of web vulnerability case studies conducted on intentional
 
 ---
 
-### 2. More Coming Soon...
+### 2. OWASP Juice Shop 🔜
+
+| # | Vulnerability | Description |
+|---|--------------|-------------|
+| 1 | SQL Injection | Extracting data from the database via login and search fields |
+| 2 | XSS Reflected | Injecting scripts through URL parameters |
+| 3 | XSS Stored | Persisting malicious scripts in product reviews and feedback |
+| 4 | Broken Access Control | Accessing the hidden admin panel without credentials |
+| 5 | IDOR | Accessing other users' orders by manipulating IDs |
+| 6 | JWT Token Manipulation | Forging admin tokens by exploiting weak JWT signing |
+| 7 | Brute Force | Automating login attacks against user accounts |
+| 8 | Sensitive Data Exposure | Finding exposed API keys, credentials, and hidden endpoints |
+| 9 | CSRF | Forging requests on behalf of authenticated users |
+| 10 | XXE Injection | Reading server files via malicious XML payloads |
 
 ---
 
