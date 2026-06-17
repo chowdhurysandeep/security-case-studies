@@ -177,16 +177,47 @@ for password in passwords:
 
 ![Brute Force High 1](DVWA/Bruteforce/high1.png)
 ![Brute Force High 2](DVWA/Bruteforce/high2.png)
+
+> 🛠️ Configuration of Burp Suite For CSRF token bypass 
+
+**Step 1: Setting up a Macro in Burp Suite Sessions**
+High Security adds a user_token (CSRF token) to every login request that changes with each page load — making standard Intruder useless. To bypass this, went to Settings → Sessions → Macros and clicked Add to create a new macro. The macro records a GET request to /DVWA/vulnerabilities/brute/ — this fetches a fresh page and extracts a new token before every Intruder request.
+
 ![Brute Force High 3](DVWA/Bruteforce/high3.png)
 ![Brute Force High 4](DVWA/Bruteforce/high4.png)
+
+**Step 2: Configuring the Macro Item parameters**
+Inside the Macro Editor, configured how each parameter is handled. username, password, and Login are set to "Use preset value" so they stay fixed. The user_token field shows the current token value — this will be overwritten automatically with a fresh one from each response.
+
 ![Brute Force High 5](DVWA/Bruteforce/high5.png)
+
+**Step 3: Defining the custom parameter to extract user_token**
+Clicked Add under "Custom parameter locations in response" to teach Burp exactly where to find the token in the HTML response. Set the Parameter name to user_token and used the regex name='user_token' value='(.*?)' to extract it from the hidden input field visible in the raw HTML at line 90. This tells Burp to grab the new token from every fresh page load automatically.
+
 ![Brute Force High 6](DVWA/Bruteforce/high6.png)
+
+**Step 4: Creating a Session Handling Rule**
+Back in Settings → Sessions → Session Handling Rules, clicked Add to create a new rule. This rule will run the macro before every Intruder request — ensuring a fresh user_token is always injected into the attack.
+
 ![Brute Force High 7](DVWA/Bruteforce/high7.png)
+
+**Step 5: Linking the Macro to the Session Rule**
+In the Session Handling Action editor, selected Macro 2 as the macro to run. Set it to "Update only the following parameters and headers" and entered user_token — this tells Burp to only replace the token, leaving everything else in the request untouched.
+
 ![Brute Force High 8](DVWA/Bruteforce/high8.png)
 ![Brute Force High 9](DVWA/Bruteforce/high9.png)
+
+**Step 6: Setting the Scope to Intruder only**
+In the Scope tab of the Session Handling Rule, ticked only Intruder under Tools scope and set the URL scope to http://localhost/dvwa/ — so this rule only fires during Intruder attacks on DVWA and doesn't interfere with other tools.
+
 ![Brute Force High 10](DVWA/Bruteforce/high10.png)
+
+**Step 7: Intruder results with Grep-Match filter**
+Added "Welcome to the password protected area" as a Grep-Match string so Burp flags the successful response automatically. In the results — password is highlighted with status 200, response time 14ms, length 5274, and a match count of 2 in the Grep column — confirming the correct password was found. All wrong passwords returned 302 redirects with length 336, making the correct one instantly visible.
+
 ![Brute Force High 11](DVWA/Bruteforce/high11.png)
 ![Brute Force High 12](DVWA/Bruteforce/high12.png)
+![Brute Force High 13](DVWA/Bruteforce/high13.png)
 
 ---
 
