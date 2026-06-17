@@ -237,9 +237,35 @@ Zero input filtering. Used `;` to chain commands directly after the ping.
 127.0.0.1; whoami
 127.0.0.1; cat /etc/passwd
 ```
+**Step 1: Testing the Input Field** — Entered a valid IP address 127.0.0.1 into the ping field to confirm the application passes input directly to the shell. 
+The ping executed successfully, returning 4 ICMP replies — confirming the input reaches the OS command layer without any filtering.
 
 ![Command Injection Low 1](DVWA/Command%20Injection/low1.png)
+
+**Step 2: Injecting the First Payload** — Entered 127.0.0.1; whoami into the IP field, chaining the whoami command using a semicolon ; operator. The server executed both commands and returned www-data, confirming successful Remote Code Execution under the web server's user context.
+
+**Server-side command executed:**
+```bash
+ping -c 4 127.0.0.1; whoami
+```
+
+**Output:**
+- Ping ran successfully against `127.0.0.1`
+- `whoami` returned **`www-data`** — confirming the web server is 
+  running as the `www-data` user
+
 ![Command Injection Low 2](DVWA/Command%20Injection/low2.png)
+
+**Step 3: Extracting System Users** — Used the payload 127.0.0.1; cat /etc/passwd to read the system's user account file. The full contents of /etc/passwd were printed directly in the browser, exposing every user account and service running on the server.
+
+**Server-side command executed:**
+```bash
+ping -c 4 127.0.0.1; cat /etc/passwd
+```
+
+The `cat /etc/passwd` command reads the system's user account file,
+which stores information about every user on the system.
+
 ![Command Injection Low 3](DVWA/Command%20Injection/low3.png)
 
 ---
@@ -254,7 +280,12 @@ The server blocks `;` and `&&` — but completely forgets about the pipe `|`.
 
 > 💡 The filter only removes `;` and `&&` — pipe is never mentioned.
 
+**Step 1: Switching to Medium Security — Bypassing the Filter with Pipe |** — Changed the DVWA security level to Medium, where the server now blocks ; and && operators. However, the filter completely ignores the pipe operator |, so entering 127.0.0.1 | whoami still executes successfully and returns www-data, confirming the blacklist filter is incomplete and easily bypassed.
+
 ![Command Injection Medium 1](DVWA/Command%20Injection/medium1.png)
+
+**Step 2: Escalating on Medium Security** — Used the pipe operator | to chain cat /etc/passwd with the payload 127.0.0.1 | cat /etc/passwd, proving that the Medium level filter bypass is not limited to just whoami. The full /etc/passwd file was dumped successfully in the browser, confirming that an attacker can extract the same sensitive system information on Medium security as they could on Low — only the operator changed, not the impact.
+
 ![Command Injection Medium 2](DVWA/Command%20Injection/medium2.png)
 
 ---
@@ -269,7 +300,12 @@ More characters are blocked — but there is a **typo in the filter**. It blocks
 
 > 💡 No space between `|` and `whoami` — sneaks past the filter completely.
 
+**Step 1: Bypassing the Filter with a Typo** — The filter now blocks ;, &&, and |  (pipe with a space). However, the developer made a critical typo in the filter — it blocks | whoami but not |whoami (pipe with no space). Entering 127.0.0.1 |whoami with no space between the pipe and the command sneaks past the filter completely and still returns www-data, proving that even one missing character in a blacklist can break the entire security layer.
+
 ![Command Injection High 1](DVWA/Command%20Injection/high1.png)
+
+**Step 8: Escalating with the Typo Bypass** — Used the same typo bypass with 127.0.0.1 |cat /etc/passwd (no space between pipe and command) to dump the full /etc/passwd file. The complete list of system users was returned directly in the browser, confirming that the typo in the filter is not just limited to whoami — any command can be injected, making the filter just as ineffective as Medium when exploited correctly.
+
 ![Command Injection High 2](DVWA/Command%20Injection/high2.png)
 
 ---
@@ -300,7 +336,7 @@ No CSRF token and no Referer check. Created an HTML file that auto-submits a pas
 
 > 💡 When a logged-in DVWA user opens `attack.html` — their password is changed to `hacked` without them clicking anything.
 
-![CSRF Low 1](DVWA/CSRF/low1.png)
+![CSRF Low 1](DVWA/CSRF/low.png)
 ![CSRF Low 2](DVWA/CSRF/low2.png)
 
 ---
