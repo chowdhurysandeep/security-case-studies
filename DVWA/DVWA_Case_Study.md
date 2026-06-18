@@ -107,11 +107,11 @@ Sent the intercepted request to **Intruder**, marked the `password` parameter as
 
 ![Brute Force Low 3](DVWA/Bruteforce/low3.png)
 
+![Brute Force Low 4](DVWA/Bruteforce/low4.png)
+
 **Step 3: Login confirmed with found password**
  
 Used the discovered password `password` to log in — server responded with **"Welcome to the password protected area admin"**, confirming the brute force was successful.
-
-![Brute Force Low 4](DVWA/Bruteforce/low4.png)
 
 ![Brute Force Low 5](DVWA/Bruteforce/low5.png)
 
@@ -121,10 +121,10 @@ Used the discovered password `password` to log in — server responded with **"W
 
 The server adds a **2-second delay** after every failed login to slow down tools. Burp Suite Intruder still works — it just takes longer.
 
-![Brute Force Low 1](DVWA/Bruteforce/low1.png)
-
 **Step 1: Intercept the login request**
 Same process as Low — intercepted the login request in Burp Suite Proxy. Notice the cookie shows security=medium, confirming we are now testing the Medium level. The 2-second server delay is invisible at this stage.
+
+![Brute Force Low 1](DVWA/Bruteforce/low1.png)
 
 ![Brute Force Medium 1](DVWA/Bruteforce/medium1.png)
 
@@ -133,6 +133,10 @@ Same Sniper attack with the same wordlist. password again stands out with 5115 b
 
 ![Brute Force Medium 2](DVWA/Bruteforce/medium2.png)
 ![Brute Force Medium 3](DVWA/Bruteforce/medium3.png)
+
+**Step 3: Login confirmed with found password**
+Used the discovered password `password` to log in — server responded with **"Welcome to the password protected area admin"**, confirming the brute force was successful.
+
 ![Brute Force Medium 4](DVWA/Bruteforce/medium4.png)
 
 ---
@@ -176,7 +180,6 @@ for password in passwords:
 > 💡 The script logs in automatically, then loops through passwords — fetching a fresh CSRF token before every single attempt.
 
 ![Brute Force High 1](DVWA/Bruteforce/high1.png)
-![Brute Force High 2](DVWA/Bruteforce/high2.png)
 
 > 🛠️ Configuration of Burp Suite For CSRF token bypass 
 
@@ -237,7 +240,7 @@ Zero input filtering. Used `;` to chain commands directly after the ping.
 127.0.0.1; whoami
 127.0.0.1; cat /etc/passwd
 ```
-**Step 1: Testing the Input Field** — Entered a valid IP address 127.0.0.1 into the ping field to confirm the application passes input directly to the shell. 
+**Step 1: Testing the Input Field** — Entered a valid IP address 1.1.1.1 into the ping field to confirm the application passes input directly to the shell. 
 The ping executed successfully, returning 4 ICMP replies — confirming the input reaches the OS command layer without any filtering.
 
 ![Command Injection Low 1](DVWA/Command%20Injection/low1.png)
