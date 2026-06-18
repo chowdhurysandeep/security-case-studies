@@ -93,9 +93,9 @@ Home Page at `http://localhost/DVWA/index.php`
 
 No rate limiting, no lockout, no CAPTCHA. Used **Burp Suite Intruder** in Sniper mode with a custom wordlist to find the password instantly.
 
+
 **Step 1: Intercept the login request using Burp Suite Proxy**
- 
-Opened the DVWA Brute Force page and submitted a test login. Burp Suite intercepted the GET request — showing `username=admin&password=test` clearly in the request. This confirms the parameters we need to attack.
+ Opened the DVWA Brute Force page and submitted a test login. Burp Suite intercepted the GET request — showing `username=admin&password=test` clearly in the request. This confirms the parameters we need to attack.
 
 ![Brute Force Low 1](DVWA/Bruteforce/low1.png)
 
