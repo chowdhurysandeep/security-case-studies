@@ -575,7 +575,6 @@ The server uses `mysqli_real_escape_string()` but forgets to wrap the value in q
 
 ```
 1 OR 1=1
-1 UNION SELECT user, password FROM users-- -
 ```
 
 ![SQL Injection Medium 1](DVWA/sqli/medium1.png)
@@ -610,11 +609,32 @@ Input is taken via a **pop-up form** into a session variable — designed to con
 
 Session IDs are simply **auto-incrementing integers**: 1, 2, 3... Confirmed by clicking Generate multiple times and watching the `dvwaSession` cookie in browser Developer Tools.
 
+**Step 1 — Loading the Weak Session IDs page**
+Navigated to http://localhost/DVWA/vulnerabilities/weak_id/ and opened Firefox Developer Tools → Storage tab to monitor cookies in real time. Clicked Generate for the first time — the security cookie confirms we're testing at Low level.
+
 ![Weak Session Low 1](DVWA/Weak%20Session%20ID/low1.png)
+
+**Step 2 — First session ID generated**
+After clicking Generate, a new cookie named dvwaSessi... (dvwaSessionID) appears with value 1. This is the very first session ID issued by the application.
+
 ![Weak Session Low 2](DVWA/Weak%20Session%20ID/low2.png)
+
+**Step 3 — Second click — ID increments to 2**
+Clicked Generate again. The dvwaSessionID cookie value changed from 1 to 2 — confirming the ID is a simple incrementing counter, not a random token.
+
 ![Weak Session Low 3](DVWA/Weak%20Session%20ID/low3.png)
+
+**Step 4 — Third click — ID increments to 3**
+Clicked Generate a third time. The session ID predictably moved to 3, reinforcing the pattern — each new session is exactly the previous value + 1.
+
 ![Weak Session Low 4](DVWA/Weak%20Session%20ID/low4.png)
+
+Step 5 — Fourth click — ID increments to 4
+One more click confirms the pattern holds — the value is now 4. At this point the pattern is fully proven: dvwaSessionID is just a sequential integer counter with no randomness at all.
+
 ![Weak Session Low 5](DVWA/Weak%20Session%20ID/low5.png)
+
+>💡 Since session IDs increment by exactly 1 every time, an attacker who knows or guesses any single valid session ID can simply increment or decrement it to access every other active session on the server — no password or token required.
 
 ---
 
@@ -623,12 +643,20 @@ Session IDs are simply **auto-incrementing integers**: 1, 2, 3... Confirmed by c
 Session ID is now the **current Unix timestamp**. Confirmed using:
 
 ```bash
-date -d @<session_value>
+epochconverter.com
 ```
 
 > 💡 Output showed the exact current date and time — still fully predictable.
 
+**Step 1 — Generating a session ID and checking its value**
+Set security to Medium and clicked Generate. The dvwaSessionID cookie now shows a long number — 1776472210 — completely different from the simple 1, 2, 3 pattern seen at Low. This looks like it could be a timestamp.
+
 ![Weak Session Medium 1](DVWA/Weak%20Session%20ID/medium1.png)
+
+**Step 2 — Verifying the value using EpochConverter**
+Took the session ID value 1776472210 and checked it against epochconverter.com, which displays the current Unix epoch time live. The site's live epoch counter showed a value just a few seconds ahead — confirming that 1776472210 is itself a valid, real Unix timestamp matching the exact moment the 
+session was generated.
+
 ![Weak Session Medium 2](DVWA/Weak%20Session%20ID/medium2.png)
 
 ---
@@ -637,15 +665,7 @@ date -d @<session_value>
 
 Session ID is now an **MD5 hash** — but of a small integer. MD5 of small numbers is instantly reversible.
 
-```bash
-echo -n "1" | md5sum
-# c4ca4238a0b923820dcc509a6f75849b
-
-echo -n "2" | md5sum
-# c81e728d9d4c2f636f067f89cc14862c
-```
-
-> 💡 Matched the `dvwaSession` cookie to MD5("1") — confirming it is trivially crackable.
+> 💡 Matched the `dvwaSession` cookie to MD5 — confirming it is trivially crackable.
 
 ![Weak Session High 1](DVWA/Weak%20Session%20ID/high1.png)
 ![Weak Session High 2](DVWA/Weak%20Session%20ID/high2.png)
@@ -734,7 +754,7 @@ The server removes the exact string `<script>` — but only script tags. HTML ev
 
 > 💡 The filter checks for `<script>` only — an `<img>` tag with `onerror` is invisible to it.
 
-![XSS Reflected Medium](DVWA/XSS%20(Reflected)/medium1.png)
+![XSS Reflected Medium](DVWA/XSS%20(Reflected)/medium.png)
 
 ---
 
