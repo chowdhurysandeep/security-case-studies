@@ -55,7 +55,7 @@ This case study documents every vulnerability I tested — the payloads used, wh
 | **Attacker Machine** | Kali Linux |
 | **DVWA URL** | `http://localhost/dvwa/` |
 | **Login** | `admin / password` |
-| **Tools Used** | Burp Suite · SQLMap · Python · exiftool |
+| **Tools Used** | Burp Suite · SQLMap · exiftool |
 | **Levels Tested** | 🟢 Low · 🟡 Medium · 🔴 High |
 
 
