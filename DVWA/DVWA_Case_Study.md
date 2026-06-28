@@ -805,7 +805,7 @@ Script tags blocked by case-insensitive regex — but it only covers `<script>`.
 | **XSS** | Filters targeting specific tags always miss event handlers in other elements |
 | **File Upload** | Server-side MIME check + store outside web root is the correct approach |
 | **File Inclusion** | Never pass raw user input to `include()` |
-| **Brute Force** | Rate limiting + CSRF tokens slow attacks but a Python script still breaks High |
+| **Brute Force** | Rate limiting alone isn't enough — automating CSRF token renewal (Burp Macro + Session Handling Rule) closes the gap that Intruder alone can't. |
 | **CSRF** | Per-request tokens with `SameSite=Strict` is the proper fix |
 | **Weak Sessions** | Session IDs must be cryptographically random — never sequential or predictable |
 
