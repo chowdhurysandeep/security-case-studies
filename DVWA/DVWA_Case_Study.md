@@ -143,6 +143,14 @@ Used the discovered password `password` to log in — server responded with **"W
 
 ### 🔴 High Security
 
+Reviewed the server-side PHP source at vulnerabilities/brute/source/high.php before attempting the bypass. Three key defences stand out compared to Low and Medium:
+
+1st **checkToken()** — validates a user_token (CSRF token) on every request against the session, comparing it to $_SESSION['session_token']. This is the main barrier — any login attempt without a fresh, valid token is rejected outright.
+
+2nd **mysqli_real_escape_string()** — both username and password are sanitised before the query, closing off SQL injection on this endpoint.
+
+3rd **sleep(rand(0, 3))** — on failed login, the server sleeps for a random duration between 0–3 seconds. Unlike Medium's fixed 2-second delay, this randomised delay makes timing-based automation slightly harder to predict.
+
 ![Brute Force High 1](DVWA/Bruteforce/high1.png)
 
 > 🛠️ Configuration of Burp Suite For CSRF token bypass 
